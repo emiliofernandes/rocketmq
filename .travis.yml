@@ -13,7 +13,10 @@ matrix:
   include:
   # On OSX, run with default JDK only.
   # - os: osx
-  - name: arm64
+  # On Linux we install latest OpenJDK 1.8 from Ubuntu repositories
+  - name: Linux x86_64
+    arch: amd64
+  - name: Linux aarch64
     arch: arm64
     
 cache:
@@ -47,4 +50,3 @@ after_success:
   - mvn clean install -Pit-test
   - mvn sonar:sonar -Psonar-apache
   - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
-  
