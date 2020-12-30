@@ -9,16 +9,10 @@ notifications:
 
 language: java
 
-jdk:
-  - oraclejdk8
-
 matrix:
   include:
   # On OSX, run with default JDK only.
   # - os: osx
-  # On Linux, run with specific JDKs only.
-  - os: linux
-    env: CUSTOM_JDK="oraclejdk8"
   - name: arm64
     arch: arm64
     
@@ -32,12 +26,11 @@ before_install:
   - echo 'MAVEN_OPTS="$MAVEN_OPTS -Xmx1024m -XX:MaxPermSize=512m -XX:+BytecodeVerificationLocal"' >> ~/.mavenrc
   - cat ~/.mavenrc
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_CPU_ARCH" == "amd64" ]]; then jdk_switcher use "$CUSTOM_JDK"; fi
 
 install: |
-  if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_CPU_ARCH" == "arm64" ]]; then 
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
     sudo apt install -y openjdk-8-jdk maven
-    export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-arm64/"
+    export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-${TRAVIS_CPU_ARCH}/"
     export PATH="$JAVA_HOME/bin:$PATH"
   fi
   
@@ -54,3 +47,4 @@ after_success:
   - mvn clean install -Pit-test
   - mvn sonar:sonar -Psonar-apache
   - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
+  
