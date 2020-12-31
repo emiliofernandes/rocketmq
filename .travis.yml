@@ -43,7 +43,7 @@ install: |
 before_script:
   - java -version
   - mvn -version
-
+  - travis_retry mvn -B dependency:resolve dependency:resolve-plugins
 
 script:
   - travis_retry mvn -B clean apache-rat:check
