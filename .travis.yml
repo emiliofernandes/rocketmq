@@ -44,11 +44,10 @@ before_script:
   - mvn -version
   
 script:
-  #- travis_retry mvn -B clean apache-rat:check
-  #- travis_retry mvn -B package jacoco:report coveralls:report
-  - travis_retry mvn -B package -DskipTests
-
-#after_success:
-  #- mvn clean install -Pit-test
-  #- mvn sonar:sonar -Psonar-apache
-  #- bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
+  - travis_retry mvn -B clean apache-rat:check
+  - travis_retry mvn -B package jacoco:report coveralls:report
+  
+after_success:
+  - mvn clean install -Pit-test
+  - mvn sonar:sonar -Psonar-apache
+  - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
