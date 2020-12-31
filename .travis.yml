@@ -1,4 +1,4 @@
-dist: focal
+dist: bionic
 
 notifications:
   email:
@@ -32,6 +32,7 @@ before_install:
 
 install: |
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+    sudo apt update
     sudo apt install -y openjdk-8-jdk maven
     dpkg -l maven
     ls -laR /usr/share/maven
