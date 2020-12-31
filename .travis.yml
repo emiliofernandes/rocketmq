@@ -25,7 +25,6 @@ cache:
     
 before_install:
   - lscpu
-  - env
   - echo 'MAVEN_OPTS="$MAVEN_OPTS -Xmx1024m -XX:MaxPermSize=512m -XX:+BytecodeVerificationLocal"' >> ~/.mavenrc
   - cat ~/.mavenrc
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
@@ -43,13 +42,13 @@ install: |
 before_script:
   - java -version
   - mvn -version
-  - travis_retry mvn -B dependency:resolve dependency:resolve-plugins
-
+  
 script:
-  - travis_retry mvn -B clean apache-rat:check
-  - travis_retry mvn -B package jacoco:report coveralls:report
+  #- travis_retry mvn -B clean apache-rat:check
+  #- travis_retry mvn -B package jacoco:report coveralls:report
+  - travis_retry mvn -B package -DskipTests
 
-after_success:
-  - mvn clean install -Pit-test
-  - mvn sonar:sonar -Psonar-apache
-  - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
+#after_success:
+  #- mvn clean install -Pit-test
+  #- mvn sonar:sonar -Psonar-apache
+  #- bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
